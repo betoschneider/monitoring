@@ -62,6 +62,28 @@ O `-d` serve para rodar em modo "detached" (em segundo plano). Depois disso, voc
 
 ---
 
+## 4. Visualizando os Dados no Grafana
+
+Agora que os dados estão sendo coletados, precisamos transformá-los em gráficos. No Grafana, siga estes passos:
+
+### Configurando o Data Source
+1. Acesse o Grafana em `http://seu-ip:3000`.
+2. Vá em **Connections** -> **Data Sources** -> **Add data source**.
+3. Selecione **Prometheus**.
+4. No campo **Connection URL**, digite: `http://prometheus:9090` (usamos o nome do serviço definido no Docker Compose).
+5. Clique em **Save & Test** no final da página.
+
+### Importando Dashboards Prontos
+Não precisamos criar tudo do zero! Existem dashboards excelentes na comunidade. Para importar:
+1. No menu lateral, clique no ícone de **+** (ou Dashboards) -> **Import**.
+2. No campo **Import via grafana.com**, digite os IDs abaixo e clique em **Load**:
+   - **Node Exporter (Métricas da Máquina)**: ID `1860`
+   - **cAdvisor (Métricas dos Containers)**: ID `14282`
+3. Na próxima tela, selecione o Data Source "Prometheus" que você configurou no passo anterior.
+4. Clique em **Import**.
+
+---
+
 ## Conclusão
 
-Ter um sistema de monitoramento não precisa ser complexo. Com esses dois arquivos, você transformou uma máquina comum em um servidor monitorado profissionalmente. Agora, o próximo passo é entrar no Grafana, adicionar o Prometheus como *Data Source* e começar a criar seus dashboards! 🚀
+Ter um sistema de monitoramento não precisa ser complexo. Com esses dois arquivos, você transformou uma máquina comum em um servidor monitorado profissionalmente. Agora você tem visibilidade total do hardware e dos seus containers em tempo real! 🚀
