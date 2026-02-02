@@ -35,18 +35,18 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
 
   prometheus:
-  image: prom/prometheus
-  container_name: prometheus
-  restart: always
-  networks:
-    - monitoring
-  ports: []
-  volumes:
-    - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    - prometheus-data:/prometheus
-  command:
-    - "--config.file=/etc/prometheus/prometheus.yml"
-    - "--storage.tsdb.retention.time=7d"
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    networks:
+      - monitoring
+    ports: []
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=7d"
 
   grafana:
     image: grafana/grafana
