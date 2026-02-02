@@ -11,8 +11,15 @@ services:
     restart: always
     networks:
       - monitoring
-    ports:
-      - "9100:9100"
+    ports: []
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -20,8 +27,7 @@ services:
     restart: always
     networks:
       - monitoring
-    ports:
-      - "8080:8080"
+    ports: []
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -29,17 +35,18 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
 
   prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    restart: always
-    networks:
-      - monitoring
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - "--storage.tsdb.retention.time=7d"
+  image: prom/prometheus
+  container_name: prometheus
+  restart: always
+  networks:
+    - monitoring
+  ports: []
+  volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    - prometheus-data:/prometheus
+  command:
+    - "--config.file=/etc/prometheus/prometheus.yml"
+    - "--storage.tsdb.retention.time=7d"
 
   grafana:
     image: grafana/grafana
@@ -54,3 +61,4 @@ services:
 
 volumes:
   grafana-data:
+  prometheus-data:

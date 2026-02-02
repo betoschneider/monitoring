@@ -1,0 +1,30 @@
+# === Dados e volumes locais ===
+prometheus-data/
+grafana-data/
+data/
+*.db
+
+# === Variáveis de ambiente / segredos ===
+.env
+.env.*
+secrets/
+*.key
+*.pem
+*.crt
+
+# === Logs ===
+*.log
+logs/
+
+# === Arquivos do sistema ===
+.DS_Store
+Thumbs.db
+
+# === VSCode / IDEs ===
+.vscode/
+.idea/
+
+# === Backup e temporários ===
+*~
+*.swp
+*.bak
