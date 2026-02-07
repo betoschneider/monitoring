@@ -2,7 +2,11 @@ version: "3.8"
 
 networks:
   monitoring:
-
+    external: true
+  monitoring_monitoring:
+    external: true
+  proxy:
+    external: true
 
 services:
   node-exporter:
@@ -32,7 +36,7 @@ services:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   prometheus:
     image: prom/prometheus
