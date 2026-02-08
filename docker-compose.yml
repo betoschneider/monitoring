@@ -46,11 +46,6 @@ services:
     networks:
       - monitoring
     ports: []
-    # --- NOVO BLOCO ---
-    # Força o cAdvisor a olhar a pasta correta (overlay2)
-    command:
-      - "-storage_driver=overlay2"
-    # ------------------
     devices:
       - /dev/kmsg
     volumes:
@@ -60,6 +55,7 @@ services:
       - /var/lib/docker:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    # REMOVA O BLOCO "command" QUE ESTAVA AQUI
 
   prometheus:
     image: prom/prometheus
