@@ -38,23 +38,24 @@ services:
   #     - /sys:/sys:ro
   #     - /var/run/docker.sock:/var/run/docker.sock:ro
   cadvisor:
-    # Use uma versão específica (v0.47.0 ou superior funciona melhor com kernels novos)
-    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    image: gcr.io/cadvisor/cadvisor:v0.47.2 # Versão mais estável que a latest
     container_name: cadvisor
     restart: always
-    privileged: true # <--- IMPORTANTE: Permite acessar métricas reais do host
+    privileged: true # Obrigatório para acessar métricas reais
     networks:
       - monitoring
-    ports: []
+    ports: [] # Não precisa expor porta se o Prometheus acessa pela rede interna
+    devices:
+      - /dev/kmsg
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
+      # --- AJUSTES PARA SNAP ---
+      # 1. O socket do Docker (tente este caminho comum do Snap, ou o padrão se falhar)
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker:/var/lib/docker:ro # <--- IMPORTANTE: Necessário para resolver nomes dos containers
-      # Em alguns Linux (RHEL/CentOS/Fedora) pode ser necessário montar o cgroup também, mas teste sem primeiro.
-    devices:
-      - /dev/kmsg
+      # 2. Onde o Docker Snap guarda os dados dos containers (CRUCIAL para aparecer os nomes)
+      - /var/snap/docker/common/var-lib-docker:/var/lib/docker:ro
 
   prometheus:
     image: prom/prometheus
