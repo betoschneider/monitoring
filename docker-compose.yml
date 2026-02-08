@@ -38,7 +38,6 @@ services:
   #     - /sys:/sys:ro
   #     - /var/run/docker.sock:/var/run/docker.sock:ro
   cadvisor:
-    # MUDAR DE v0.49.1 PARA v0.50.0
     image: gcr.io/cadvisor/cadvisor:v0.50.0
     container_name: cadvisor
     restart: always
@@ -47,6 +46,11 @@ services:
     networks:
       - monitoring
     ports: []
+    # --- NOVO BLOCO ---
+    # Força o cAdvisor a olhar a pasta correta (overlay2)
+    command:
+      - "-storage_driver=overlay2"
+    # ------------------
     devices:
       - /dev/kmsg
     volumes:
