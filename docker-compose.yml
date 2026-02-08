@@ -38,13 +38,12 @@ services:
   #     - /sys:/sys:ro
   #     - /var/run/docker.sock:/var/run/docker.sock:ro
   cadvisor:
-    # Versão mais recente e estável para Linux moderno
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    # MUDAR DE v0.49.1 PARA v0.50.0
+    image: gcr.io/cadvisor/cadvisor:v0.50.0
     container_name: cadvisor
     restart: always
-    # 'privileged' e 'pid: host' são OBRIGATÓRIOS para ver nomes de containers
     privileged: true
-    pid: host # <--- ESSA É A CHAVE QUE FALTAVA
+    pid: host
     networks:
       - monitoring
     ports: []
@@ -56,7 +55,6 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
-      # Garante que o socket está montado corretamente
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   prometheus:
