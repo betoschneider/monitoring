@@ -38,10 +38,13 @@ services:
   #     - /sys:/sys:ro
   #     - /var/run/docker.sock:/var/run/docker.sock:ro
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    # Versão mais recente e estável para Linux moderno
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
     container_name: cadvisor
     restart: always
-    privileged: true # <--- Essencial para ler metadados
+    # 'privileged' e 'pid: host' são OBRIGATÓRIOS para ver nomes de containers
+    privileged: true
+    pid: host # <--- ESSA É A CHAVE QUE FALTAVA
     networks:
       - monitoring
     ports: []
@@ -51,12 +54,10 @@ services:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # AQUI ESTÁ O SEGREDO:
-      # O lado esquerdo DEVE ser o caminho que você viu no Passo 1 (/var/lib/docker)
       - /var/lib/docker:/var/lib/docker:ro
-      # Adicione também este para garantir leituras de disco corretas:
       - /dev/disk/:/dev/disk:ro
+      # Garante que o socket está montado corretamente
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   prometheus:
     image: prom/prometheus
