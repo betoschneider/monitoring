@@ -25,10 +25,24 @@ services:
       - '--path.sysfs=/host/sys'
       - '--path.rootfs=/rootfs'
 
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:latest
+  #   container_name: cadvisor
+  #   restart: always
+  #   networks:
+  #     - monitoring
+  #   ports: []
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    # Use uma versão específica (v0.47.0 ou superior funciona melhor com kernels novos)
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor
     restart: always
+    privileged: true # <--- IMPORTANTE: Permite acessar métricas reais do host
     networks:
       - monitoring
     ports: []
@@ -37,6 +51,10 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker:/var/lib/docker:ro # <--- IMPORTANTE: Necessário para resolver nomes dos containers
+      # Em alguns Linux (RHEL/CentOS/Fedora) pode ser necessário montar o cgroup também, mas teste sem primeiro.
+    devices:
+      - /dev/kmsg
 
   prometheus:
     image: prom/prometheus
